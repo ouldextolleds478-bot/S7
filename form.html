@@ -81,5 +81,13 @@
 
   <!-- Шаг 2: Подключение скрипта -->
   <script src="form.js" defer></script>
+  <!-- Регистрация Service Worker -->
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("./sw.js").catch((error) => {
+        console.error("Не удалось зарегистрировать service worker:", error);
+      });
+    }
+  </script>
 </body>
 </html>

@@ -21,6 +21,7 @@
     </nav>
 
     <h1>Дайте вещам вторую жизнь (обновлено)</h1>
+    <p>Учебная версия 1</p> <!-- Добавленная строка -->
     <p>Выберите материал для переработки</p>
 
     <!-- Шаг 3: Абзац для статуса и счетчика -->
@@ -48,5 +49,13 @@
   </main>
 
   <script src="catalog.js" defer></script>
+  <!-- Регистрация Service Worker -->
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("./sw.js").catch((error) => {
+        console.error("Не удалось зарегистрировать service worker:", error);
+      });
+    }
+  </script>
 </body>
 </html>

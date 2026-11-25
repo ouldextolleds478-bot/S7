@@ -1,4 +1,5 @@
-const VERSION = "v1";
+// ЗДЕСЬ ИЗМЕНЕНА ВЕРСИЯ НА V2
+const VERSION = "v2";
 const SCOPE = self.registration.scope;
 const CACHE_PREFIX = `variant26-web:${SCOPE}:`;
 const CACHE_NAME = CACHE_PREFIX + VERSION;

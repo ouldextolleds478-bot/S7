@@ -1,39 +1,49 @@
-const unitValue = 5;
-const extraValue = 2;
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.getElementById("order-form");
+  const productSelect = document.getElementById("product-select");
+  const quantityInput = document.getElementById("quantity-input");
+  const resultBox = document.getElementById("result-box");
+  const errorBox = document.getElementById("error-box");
 
-function getResult(quantityText, unitAmount, extraAmount) {
-  if (quantityText.trim() === "") {
-    return "Ошибка: укажите количество";
-  }
+  // Очистка при вводе (чтобы старый результат исчезал)
+  form.addEventListener("input", function () {
+    resultBox.textContent = "";
+    errorBox.textContent = "";
+  });
 
-  const quantity = Number(quantityText);
+  // Обработка отправки
+  form.addEventListener("submit", function (event) {
+    event.preventDefault(); 
 
-  if (!Number.isFinite(quantity)) {
-    return "Ошибка: введите число";
-  }
+    resultBox.textContent = "";
+    errorBox.textContent = "";
 
-  if (quantity <= 0 || !Number.isInteger(quantity)) {
-    return "Ошибка: нужно положительное целое количество";
-  }
+    const quantityValue = quantityInput.value.trim();
+    
+    if (quantityValue === "") {
+      errorBox.textContent = "Ошибка: укажите количество";
+      return;
+    }
 
-  const totalAmount = unitAmount * quantity + extraAmount;
-  return "Итого: " + totalAmount;
-}
+    const quantity = Number(quantityValue);
 
-const form = document.querySelector("form");
-const result = document.querySelector("#result");
+    if (!Number.isFinite(quantity)) {
+      errorBox.textContent = "Ошибка: введите число";
+      return;
+    }
 
-let submitCount = 0;
+    if (quantity <= 0 || !Number.isInteger(quantity)) {
+      errorBox.textContent = "Ошибка: нужно положительное целое количество";
+      return;
+    }
 
-form.addEventListener("submit", function (event) {
-  event.preventDefault();
+    const selectedOption = productSelect.options[productSelect.selectedIndex];
+    const unitPrice = Number(selectedOption.value);
+    const extraPrice = Number(selectedOption.dataset.extra) || 0;
 
-  const quantityText = document.querySelector("#quantity").value;
-  const select = document.querySelector("#item");
-  const itemName = select.options[select.selectedIndex].text;
-  const message = getResult(quantityText, unitValue, extraValue);
+    const total = unitPrice * quantity + extraPrice;
+    const productName = selectedOption.textContent.split('(')[0].trim();
 
-  submitCount = submitCount + 1;
-
-  result.textContent = "Проверка " + submitCount + ". " + itemName + ". " + message;
+    resultBox.textContent = "Итог: " + productName + " — " + total + " ₽";
+  });
 });

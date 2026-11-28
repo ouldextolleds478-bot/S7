@@ -3,48 +3,35 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Экопункт · V26 — Каталог</title>
+  <title>Каталог - Экопункт</title>
   <link rel="stylesheet" href="style.css">
-  <!-- Добавлено для PWA -->
-  <link rel="manifest" href="manifest.webmanifest">
-  <meta name="theme-color" content="#24547a">
 </head>
 <body>
   <header>
-    <p>Экопункт · V26</p>
-  </header>
-
-  <main class="page">
+    <h1>Экопункт · V26</h1>
     <nav>
       <a href="index.html">Главная</a>
       <a href="form.html">Форма</a>
     </nav>
+  </header>
 
-    <h1>Что принимаем?</h1>
+  <main>
+    <h2>Что принимаем?</h2>
     <p>Выберите одну из трёх позиций</p>
+    
+    <div>
+      <label for="search">Поиск по названию и характеристике: </label>
+      <input type="text" id="search" placeholder="Введите часть названия">
+    </div>
 
-    <!-- Поле поиска и контейнер для карточек -->
-    <p>
-      <label for="search">Поиск по названию и характеристике</label>
-      <input id="search" type="search" placeholder="Введите часть названия">
-    </p>
-    <div id="catalog-list" class="products"></div>
-    <p id="status" role="status"></p>
-
-    <footer>
-      <p>Учебный прототип · Вариант 26</p>
-    </footer>
+    <!-- Сюда скрипт будет вставлять карточки -->
+    <div id="catalog-container" style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 20px;"></div>
   </main>
 
-  <!-- Подключаем скрипт только для страницы каталога -->
-  <script src="catalog-page.js" defer></script>
-  <!-- Регистрация Service Worker -->
-  <script>
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("./sw.js").catch((error) => {
-        console.error("Не удалось зарегистрировать service worker:", error);
-      });
-    }
-  </script>
+  <footer>
+    <p>Учебный прототип · Вариант 26</p>
+  </footer>
+
+  <script src="catalog-page.js"></script>
 </body>
 </html>

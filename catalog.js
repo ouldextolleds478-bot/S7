@@ -1,17 +1,36 @@
-console.log("Расчёт моего приложения");
+console.log("Расчёт магазина электроники");
 
 /* ---------- 1. Массив карточек ---------- */
 const catalog = [
-  { position: 1, name: "Пластик", specs: "Чистый · по маркировке", description: "Бутылки и подходящая тара" },
-  { position: 2, name: "Стекло", specs: "Целое · без крышек", description: "Банки и стеклянные бутылки" },
-  { position: 3, name: "Бумага", specs: "Сухая · без загрязнений", description: "Газеты, тетради и чистая упаковка" }
+  { 
+    position: 1, 
+    name: "Смартфон", 
+    specs: "X-Phone 15 Pro", 
+    description: "8 ядер, 256 ГБ, камера 48 Мп", 
+    image: "images/phone.jpg" 
+  },
+  { 
+    position: 2, 
+    name: "Наушники", 
+    specs: "AirBass Max", 
+    description: "Беспроводные, шумоподавление", 
+    image: "images/headphones.jpg" 
+  },
+  { 
+    position: 3, 
+    name: "Умные часы", 
+    specs: "Watch Series 9", 
+    description: "AMOLED, GPS, влагозащита", 
+    image: "images/watch.jpg" 
+  }
 ];
 
 /* ---------- 2. Расчёт по выбранной записи ---------- */
-const itemName = "Пластик";
-const quantityText = "3";
-const unitValue = 5;
-const extraValue = 2;
+const itemName = "Смартфон";
+const quantityText = "2";
+const unitValue = 50000; // Цена за 1 шт.
+const extraValue = 0; // Без доплаты
+
 const isTraining = true;
 
 function getResult(quantityText, unitAmount, extraAmount) {
@@ -19,49 +38,65 @@ function getResult(quantityText, unitAmount, extraAmount) {
   const quantity = Number(quantityText);
   if (!Number.isFinite(quantity)) return "Ошибка: введите число";
   if (quantity <= 0 || !Number.isInteger(quantity)) return "Ошибка: нужно положительное целое количество";
-  return "Итого: " + (unitAmount * quantity + extraAmount);
+  return "Итог: " + (unitAmount * quantity + extraAmount) + " ₽";
 }
 
-/* ---------- 3. Работа со списком в консоли (map, filter, find) ---------- */
+/* ---------- 3. Работа со списком в консоли ---------- */
 const names = catalog.map(item => item.name);
 const longNames = catalog.filter(item => item.name.length >= 6);
-const found = catalog.find(item => item.name === "Стекло");
+const found = catalog.find(item => item.name === "Смартфон");
 
-/* ---------- 4. DOM: Поиск элементов и вывод (Шаги 3, 4) ---------- */
+/* ---------- 4. DOM: Поиск элементов и вывод ---------- */
 const status = document.querySelector("#status");
-status.textContent = catalog[0].name + " — " + catalog.length + " записей";
+if (status) {
+  status.textContent = "В каталоге " + catalog.length + " товара";
+}
 
-/* ---------- 5. DOM: Создание элементов (Шаг 5) ---------- */
+/* ---------- 5. DOM: Создание элементов ---------- */
 const namesList = document.querySelector("#names");
 
 function renderNames() {
-  namesList.replaceChildren(); // Очищаем список перед новым выводом
+  if (!namesList) return;
+  namesList.replaceChildren(); // Очищаем список
+  
   for (const item of catalog) {
     const line = document.createElement("li");
-    line.textContent = item.name;
+    line.style.marginBottom = "20px"; // Отступ между товарами
+    
+    // Картинка
+    if (item.image) {
+      const photo = document.createElement("img");
+      photo.src = item.image;
+      photo.alt = item.name;
+      photo.style.width = "100px";
+      photo.style.display = "block";
+      photo.style.marginBottom = "10px";
+      photo.style.borderRadius = "8px";
+      line.append(photo);
+    }
+
+    // Текст
+    const text = document.createElement("span");
+    text.textContent = item.name + " (" + item.specs + ") — " + item.description;
+    line.append(text);
+
     namesList.append(line);
   }
 }
 
-/* ---------- 6. DOM: Реагируем на действие (Шаг 6) ---------- */
-const showButton = document.querySelector("#show-names");
-const hideButton = document.querySelector("#hide-names"); // Доп. задание 1
+// Запускаем отрисовку списка в память (он скрыт по умолчанию)
+renderNames();
 
-let clicks = 0; // Доп. задание 2
+/* ---------- 6. Логика кнопок Показать/Скрыть ---------- */
+const btnShow = document.getElementById("show-names");
+const btnHide = document.getElementById("hide-names");
 
-// Обработчик кнопки "Показать"
-showButton.addEventListener("click", function() {
-  clicks++; // Увеличиваем счетчик нажатий
-  status.textContent = "Нажато раз: " + clicks;
-  renderNames();
-});
+if (btnShow && btnHide && namesList) {
+  btnShow.addEventListener("click", function() {
+    namesList.style.display = "block"; // Показываем список
+  });
 
-// Обработчик кнопки "Скрыть" (Доп. задание 1)
-hideButton.addEventListener("click", function() {
-  namesList.replaceChildren();
-  status.textContent = "Список скрыт";
-});
-
-/* ---------- 7. Доп. задание 3: Все параграфы ---------- */
-const allParagraphs = document.querySelectorAll("p");
-console.log("Всего параграфов на странице:", allParagraphs.length);
+  btnHide.addEventListener("click", function() {
+    namesList.style.display = "none"; // Скрываем список
+  });
+}

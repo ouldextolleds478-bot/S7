@@ -1,83 +1,54 @@
-// Данные каталога (перенесены из catalog.js)
-const catalog = [
-  {
-    position: 1,
-    name: "Пластик",
-    specs: "Чистый · по маркировке",
-    description: "Бутылки и подходящая тара"
-  },
-  {
-    position: 2,
-    name: "Стекло",
-    specs: "Целое · без крышек",
-    description: "Банки и стеклянные бутылки"
-  },
-  {
-    position: 3,
-    name: "Бумага",
-    specs: "Сухая · без загрязнений",
-    description: "Газеты, тетради и чистая упаковка"
-  }
-];
+document.addEventListener("DOMContentLoaded", function () {
+  // Данные для каталога (добавил картинки)
+  const products = [
+    { id: 1, name: "Смартфон", specs: "X-Phone 15 Pro", desc: "8 ядер, 256 ГБ, камера 48 Мп", price: 50000, image: "images/phone.jpg" },
+    { id: 2, name: "Наушники", specs: "AirBass Max", desc: "Беспроводные, шумоподавление", price: 15000, image: "images/headphones.jpg" },
+    { id: 3, name: "Умные часы", specs: "Watch Series 9", desc: "AMOLED, GPS, влагозащита", price: 25000, image: "images/watch.jpg" }
+  ];
 
-// Доп. задание: поиск по двум полям (название и характеристика)
-function filterByTextAndSpecs(items, query) {
-  const normalized = query.trim().toLowerCase();
-  
-  if (normalized === "") {
-    return items;
-  }
-  
-  return items.filter(item =>
-    item.name.toLowerCase().includes(normalized) ||
-    item.specs.toLowerCase().includes(normalized)
-  );
-}
+  const container = document.getElementById("catalog-container"); // Контейнер для карточек
+  const searchInput = document.getElementById("search"); // Поле поиска
 
-// Находим элементы на странице
-const catalogList = document.querySelector("#catalog-list");
-const statusText = document.querySelector("#status");
+  // Функция отрисовки карточек
+  function renderCards(list) {
+    if (!container) return;
+    container.innerHTML = "";
 
-// Функция отрисовки карточек
-function renderCatalog(items) {
-  // Очищаем контейнер перед новым выводом
-  catalogList.replaceChildren(); 
-  
-  for (const item of items) {
-    const card = document.createElement("article");
-    card.className = "card";
+    if (list.length === 0) {
+      container.innerHTML = "<p>Товары не найдены</p>";
+      return;
+    }
 
-    const title = document.createElement("h2");
-    title.textContent = item.name;
-
-    const specs = document.createElement("p");
-    specs.textContent = item.specs;
-    specs.className = "specs"; // Класс для стилизации плашки характеристики
-
-    const description = document.createElement("p");
-    description.textContent = item.description;
-    description.className = "description"; // Класс для стилизации описания
-
-    // Собираем карточку и вставляем в контейнер
-    card.append(title, specs, description);
-    catalogList.append(card);
+    list.forEach(function (item) {
+      const card = document.createElement("div");
+      card.className = "card";
+      
+      // Формируем карточку вместе с картинкой
+      card.innerHTML = `
+        <img src="${item.image}" alt="${item.name}" style="width: 100%; max-height: 200px; object-fit: contain; margin-bottom: 15px;">
+        <h3>${item.name}</h3>
+        <div class="specs"><strong>${item.specs}</strong></div>
+        <div class="desc">${item.desc}</div>
+        <div class="price" style="font-weight: bold; margin-top: 10px; color: #5c2c68;">${item.price} ₽</div>
+      `;
+      
+      container.append(card);
+    });
   }
 
-  // Обновляем счетчик
-  if (items.length === 0) {
-    statusText.textContent = "Ничего не найдено";
-  } else {
-    statusText.textContent = "Показано: " + items.length + " из " + catalog.length;
+  // Запуск при загрузке страницы
+  renderCards(products);
+
+  // Логика поиска
+  if (searchInput) {
+    searchInput.addEventListener("input", function (e) {
+      const query = e.target.value.toLowerCase().trim();
+      const filtered = products.filter(item => 
+        item.name.toLowerCase().includes(query) || 
+        item.specs.toLowerCase().includes(query) ||
+        item.desc.toLowerCase().includes(query)
+      );
+      renderCards(filtered);
+    });
   }
-}
-
-// Первый рендер всех карточек при загрузке
-renderCatalog(catalog);
-
-// Обработка поиска
-const searchInput = document.querySelector("#search");
-
-searchInput.addEventListener("input", function () {
-  const found = filterByTextAndSpecs(catalog, searchInput.value);
-  renderCatalog(found);
 });

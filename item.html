@@ -3,49 +3,49 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Пластик — Экопункт · V26</title>
+  <title>Магазин электроники · V26</title>
   <link rel="stylesheet" href="style.css">
-  <!-- Добавлено для PWA (для единообразия с другими страницами) -->
+  <!-- Добавлено для PWA -->
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#24547a">
 </head>
 <body>
-  <div class="top-bar">
-    <p>Экопункт · V26</p>
-  </div>
+  <header>
+    <p>Магазин электроники · V26</p>
+  </header>
 
-  <div class="container">
+  <main class="page">
     <nav>
-      <a href="index.html">Главная</a>
       <a href="catalog.html">Каталог</a>
-      <a href="form.html">План сдачи</a>
+      <a href="form.html">Форма</a>
     </nav>
 
-    <main>
-      <h1>Пластик</h1>
-      
-      <div class="hero-image">
-        <img src="images/item1.png" alt="Пластик">
-      </div>
+    <h1>Добро пожаловать в магазин электроники (обновлено)</h1>
+    <p>Учебная версия 2</p>
 
-      <p><strong>Характеристика:</strong> Чистый · по маркировке</p>
+    <!-- Шаг 3: Абзац для статуса и счетчика -->
+    <p id="status" role="status"></p>
 
-      <p>Принимаем бутылки и подходящую тару. Тара должна быть чистой и с маркировкой переработки.</p>
-      <p>Учебное уточнение 1: крышки лучше снимать — они идут отдельным потоком.</p>
-      <p>Учебное уточнение 2: сжатая бутылка занимает меньше места в контейнере.</p>
+    <!-- Шаг 5 + Доп. задание 1: Кнопки и список -->
+    <button id="show-names" type="button">Показать названия</button>
+    <button id="hide-names" type="button">Скрыть названия</button>
+    <ul id="names" style="display: none;"></ul> <!-- Список изначально скрыт -->
 
-      <p><a href="catalog.html">Вернуться в каталог</a></p>
-    </main>
+    <div class="main-actions" style="margin-top: 20px;">
+      <a href="catalog.html">Открыть каталог</a>
+      <a href="form.html">Оформить заказ</a>
+    </div>
 
     <footer>
       <p>Учебный прототип · Вариант 26</p>
     </footer>
-  </div>
+  </main>
 
+  <script src="catalog.js" defer></script>
   <!-- Регистрация Service Worker -->
   <script>
     if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("./sw.js").catch((error) => {
+      navigator.serviceWorker.register("./sw.js").catch(function (error) {
         console.error("Не удалось зарегистрировать service worker:", error);
       });
     }

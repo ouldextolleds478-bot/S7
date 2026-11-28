@@ -1,56 +1,46 @@
-// ЗДЕСЬ ИЗМЕНЕНА ВЕРСИЯ НА V2
-const VERSION = "v2";
-const SCOPE = self.registration.scope;
-const CACHE_PREFIX = `variant26-web:${SCOPE}:`;
-const CACHE_NAME = CACHE_PREFIX + VERSION;
+const VERSION = "v4";
+const CACHE_NAME = "app-cache-" + VERSION;
 
 const FILES = [
   "./",
   "./index.html",
   "./catalog.html",
   "./form.html",
-  "./item.html",
   "./style.css",
   "./catalog.js",
   "./catalog-page.js",
   "./form.js",
-  "./manifest.webmanifest",
-  // Добавляем ВСЕ ваши картинки из папки images
-  "./images/icon-192.png",
-  "./images/icon-512.png",
-  "./images/item1.png",
-  "./images/item2.png",
-  "./images/item3.png"
+  "./images/phone.jpg",
+  "./images/headphones.jpg",
+  "./images/watch.jpg"
 ];
 
-self.addEventListener("install", (event) => {
-  const requests = FILES.map((path) =>
-    new Request(new URL(path, SCOPE), { cache: "reload" })
-  );
+self.addEventListener("install", function (event) {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(requests))
-  );
-});
-
-self.addEventListener("activate", (event) => {
-  event.waitUntil(
-    caches.keys().then((names) => {
-      const oldVersions = names.filter((name) =>
-        name.startsWith(CACHE_PREFIX) && name !== CACHE_NAME
-      );
-      return Promise.all(oldVersions.map((name) => caches.delete(name)));
+    caches.open(CACHE_NAME).then(function (cache) {
+      return cache.addAll(FILES);
     })
   );
+  self.skipWaiting();
 });
 
-self.addEventListener("fetch", (event) => {
-  const request = event.request;
-  if (request.method !== "GET" || !request.url.startsWith(SCOPE)) return;
+self.addEventListener("activate", function (event) {
+  event.waitUntil(
+    caches.keys().then(function (keys) {
+      return Promise.all(
+        keys
+          .filter(function (key) { return key !== CACHE_NAME; })
+          .map(function (key) { return caches.delete(key); })
+      );
+    })
+  );
+  self.clients.claim();
+});
 
+self.addEventListener("fetch", function (event) {
   event.respondWith(
-    caches.open(CACHE_NAME).then(async (cache) => {
-      const savedResponse = await cache.match(request);
-      return savedResponse ?? fetch(request);
+    caches.match(event.request).then(function (response) {
+      return response || fetch(event.request);
     })
   );
 });

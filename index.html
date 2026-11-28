@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Экопункт · V26 — Главная</title>
+  <title>Магазин электроники · V26</title>
   <link rel="stylesheet" href="style.css">
   <!-- Добавлено для PWA -->
   <link rel="manifest" href="manifest.webmanifest">
@@ -11,7 +11,7 @@
 </head>
 <body>
   <header>
-    <p>Экопункт · V26</p>
+    <p>Магазин электроники · V26</p>
   </header>
 
   <main class="page">
@@ -20,28 +20,20 @@
       <a href="form.html">Форма</a>
     </nav>
 
-    <h1>Дайте вещам вторую жизнь (обновлено)</h1>
-    <!-- ЗДЕСЬ ИЗМЕНЕНА ВЕРСИЯ -->
-    <p>Учебная версия 2</p> 
-    <p>Выберите материал для переработки</p>
+    <h1>Добро пожаловать в магазин электроники (обновлено)</h1>
+    <p>Учебная версия 2</p>
 
     <!-- Шаг 3: Абзац для статуса и счетчика -->
     <p id="status" role="status"></p>
 
-    <!-- Шаг 5 + Доп. заданыие 1: Кнопки и список -->
+    <!-- Шаг 5 + Доп. задание 1: Кнопки и список -->
     <button id="show-names" type="button">Показать названия</button>
     <button id="hide-names" type="button">Скрыть названия</button>
-    <ul id="names"></ul>
+    <ul id="names" style="display: none;"></ul> <!-- Список изначально скрыт -->
 
-    <div class="hero-image">
-      <img src="images/item1.png" alt="Пластик">
-    </div>
-
-    <p>Три предложения для выбора. Выберите материал для переработки.</p>
-
-    <div class="main-actions">
+    <div class="main-actions" style="margin-top: 20px;">
       <a href="catalog.html">Открыть каталог</a>
-      <a href="form.html">Запланировать сдачу</a>
+      <a href="form.html">Оформить заказ</a>
     </div>
 
     <footer>
@@ -53,7 +45,7 @@
   <!-- Регистрация Service Worker -->
   <script>
     if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("./sw.js").catch((error) => {
+      navigator.serviceWorker.register("./sw.js").catch(function (error) {
         console.error("Не удалось зарегистрировать service worker:", error);
       });
     }
